@@ -21,7 +21,7 @@ func getFiles(dir string) (fileList []string) {
 	err = filepath.Walk(
 		absPath.Get(),
 		func(p string, f os.FileInfo, err error) error {
-			if err == nil && tomlRegEx.MatchString(f.Name()) {
+			if err == nil && !f.IsDir() && tomlRegEx.MatchString(f.Name()) {
 				fileList = append(fileList, p)
 			}
 			return nil
