@@ -66,3 +66,19 @@ func TestGetFiles(t *testing.T) {
 		}
 	})
 }
+
+func TestGetFilesSkipsTomlDirectories(t *testing.T) {
+	dir := t.TempDir()
+	nested := filepath.Join(dir, "group.toml")
+	if err := os.Mkdir(nested, 0755); err != nil {
+		t.Fatal(err)
+	}
+	file := filepath.Join(nested, "snippets.toml")
+	if err := os.WriteFile(file, nil, 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if diff := deep.Equal([]string{file}, getFiles(dir)); diff != nil {
+		t.Fatal(diff)
+	}
+}
